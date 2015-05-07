@@ -147,7 +147,7 @@ class TestOfSingleTableHandler extends TestDbAbstract {
 		try {
 			$this->x->create_record(null);
 		} catch (Exception $ex) {
-			$this->assertTrue((bool)preg_match('~Argument 1 passed to .+ must be of the type array, null given~', $ex->getMessage()), "unexpected exception message: ". $ex->getMessage());
+			$this->assertTrue((bool)preg_match('~Argument 1 passed to .+ must be .+ array, null given~', $ex->getMessage()), "unexpected exception message: ". $ex->getMessage());
 		}
 		
 		try {
