@@ -5,8 +5,9 @@
  * 
  */
 
-namespace crazedsanity;
-use crazedsanity\ToolBox;
+namespace crazedsanity\database;
+use crazedsanity\core\ToolBox;
+use crazedsanity\core\baseAbstract;
 
 class Database extends baseAbstract {
 	

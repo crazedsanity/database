@@ -2,10 +2,11 @@
 /*
  * Created on June 24, 2010
  */
-namespace crazedsanity;
+namespace crazedsanity\database;
 
-use crazedsanity\Database;
-use crazedsanity\ToolBox;
+use crazedsanity\database\Database;
+use crazedsanity\core\ToolBox;
+use crazedsanity\core\baseAbstract;
 use \Exception;
 
 class SingleTableHandler extends baseAbstract {
@@ -27,7 +28,7 @@ class SingleTableHandler extends baseAbstract {
 	 */
 	public function __construct(Database $dbObj, $tableName, $seqName, $pkeyField) {
 		parent::__construct();
-		self::$version->set_version_file_location(dirname(__FILE__) . '/VERSION');
+		#self::$version->set_version_file_location(dirname(__FILE__) . '/../VERSION');
 		
 		if(isset($dbObj) && is_object($dbObj) && $dbObj->is_connected()) {
 			$this->dbObj = $dbObj;

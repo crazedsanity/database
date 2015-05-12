@@ -1,7 +1,8 @@
 <?php
 
-
-use crazedsanity\ToolBox;
+namespace crazedsanity\database;
+use crazedsanity\core\ToolBox;
+use crazedsanity\core\LockFile;
 
 //TODO: make this work for more than just PostgreSQL.
 abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
@@ -18,7 +19,7 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 	 * @codeCoverageIgnore
 	 */
 	public function __construct() {
-		$this->lock = new \crazedsanity\Lockfile(constant('UNITTEST__LOCKFILE'));
+		$this->lock = new \crazedsanity\core\Lockfile(constant('UNITTEST__LOCKFILE'));
 		
 		$this->reset_db(); //make sure the database is truly in a consistent state
 		$this->setUp();
@@ -106,7 +107,7 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 	 */
 	public function internal_connect_db() {
 		if(!is_object($this->dbObj)) {
-			$this->dbObj = new \crazedsanity\Database($this->dsn, $this->user, $this->pass);
+			$this->dbObj = new \crazedsanity\database\Database($this->dsn, $this->user, $this->pass);
 		}
 	}//end internal_connect_db()
 	//-------------------------------------------------------------------------

@@ -4,7 +4,7 @@
  */
 
 
-class TestOfDatabase extends TestDbAbstract {
+class TestOfDatabase extends crazedsanity\database\TestDbAbstract {
 	
 	
 	//-------------------------------------------------------------------------

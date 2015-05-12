@@ -4,8 +4,9 @@
  */
 
 
-use crazedsanity\SingleTableHandler;
-use crazedsanity\Database;
+use crazedsanity\database\Database;
+use crazedsanity\database\TestDbAbstract;
+use crazedsanity\database\SingleTableHandler;
 
 
 class TestOfSingleTableHandler extends TestDbAbstract {
@@ -40,7 +41,7 @@ class TestOfSingleTableHandler extends TestDbAbstract {
 			$this->assertFalse(new SingleTableHandler());
 		}
 		catch(Exception $ex) {
-			$this->assertTrue((bool)preg_match('~Argument 1 passed to .+ must be an instance of crazedsanity\\\Database, none given~', $ex->getMessage()), "unexpected exception message: ". $ex->getMessage());
+			$this->assertTrue((bool)preg_match('~Argument 1 passed to .+ must be an instance of crazedsanity\\\database\\\Database, none given~', $ex->getMessage()), "unexpected exception message: ". $ex->getMessage());
 		}
 		
 		try {
