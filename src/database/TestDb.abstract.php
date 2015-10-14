@@ -10,7 +10,8 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 	public $dbParams=array();
 	public $dbObj = null;
 	protected $lock = null;
-	protected $dsn = "pgsql:host=localhost;dbname=_unittest_";
+	protected $dsn;# = "pgsql:host=localhost;dbname=_unittest_";
+	protected $type = 'pgsql';
 	protected $user = "postgres";
 	protected $pass = null;
 	
@@ -18,8 +19,14 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @codeCoverageIgnore
 	 */
-	public function __construct() {
+	public function __construct($type=null) {
 		$this->lock = new \crazedsanity\core\Lockfile(constant('UNITTEST__LOCKFILE'));
+		
+		if(is_null($type) || empty($type)) {
+			$type = 'pgsql';
+		}
+		$this->type = $type;
+		$this->dsn = $this->type .":host=localhost;dbname=_unittest_";
 		
 		$this->reset_db(); //make sure the database is truly in a consistent state
 		$this->setUp();
