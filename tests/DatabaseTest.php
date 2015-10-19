@@ -3,6 +3,7 @@
  * Created on Jun 12, 2009
  */
 
+use \crazedsanity\core\ToolBox;
 
 class TestOfDatabase extends crazedsanity\database\TestDbAbstract {
 	
@@ -14,20 +15,54 @@ class TestOfDatabase extends crazedsanity\database\TestDbAbstract {
 	//-------------------------------------------------------------------------
 	
 	
+	
+	//-------------------------------------------------------------------------
+	public function test_connect() {
+		//
+		$pg = parent::internal_connect_db('pgsql', 'postgres');
+		$this->assertEquals('pgsql', $this->type);
+		$this->assertTrue(is_object($pg));
+		$this->assertTrue($pg->is_connected());
+		try {
+		$this->assertEquals(1, parent::reset_db(__DIR__ .'/../setup/schema.pgsql.sql'));
+		}
+		catch(PDOException $px) {
+			ToolBox::debug_print($pg,1);
+//			ToolBox::debug_print($px,1);
+		}
+		
+		$my = parent::internal_connect_db('mysql', 'root');
+		$this->assertEquals('mysql', $this->type);
+		$this->assertTrue(is_object($my));
+		$this->assertTrue($my->is_connected());
+		try {
+			$this->assertEquals(1, parent::reset_db(__DIR__ .'/../setup/schema.mysql.sql'), ToolBox::debug_print($my,0));
+		}
+		catch(PDOException $x) {
+			ToolBox::debug_print($my,1);
+			ToolBox::debug_print($my->dbh,1);
+		}
+	}
+	//-------------------------------------------------------------------------
+	
+	
 	//-------------------------------------------------------------------------
 	public function test_basics() {
 		$this->assertTrue(is_object($this->dbObj), "No database objects to test");
 		
 		$types = array('pgsql', 'mysql');
+		$users = array('postgres', 'root');
 //		$type = 'pgsql';
 		
-		foreach($types as $type) {
-			parent::__construct($type);
+		foreach($types as $i=>$type) {
+			parent::internal_connect_db($type, $users[$i]);
+			parent::reset_db(__DIR__ .'/../setup/schema.'. $type .'.sql');
+			
 			$this->assertEquals($type, $this->dbObj->get_dbType(), "Database type mismatch, expecting (". $type ."), got (". $this->dbObj->get_dbType() .")");
 
 
 			//
-			if($this->assertTrue($this->reset_db(dirname(__FILE__) .'/../setup/schema.pgsql.sql'), "Failed to reset database")) {
+			if($this->assertTrue($this->reset_db(dirname(__FILE__) .'/../setup/schema.'. $type .'.sql'), "Failed to reset database")) {
 				if($this->assertFalse($this->dbObj->get_transaction_status(), "Already in transaction...?")) {
 
 					$beginTransRes = $this->dbObj->beginTrans();
@@ -177,29 +212,6 @@ class TestOfDatabase extends crazedsanity\database\TestDbAbstract {
 					$this->assertEquals(array('id'=>2, 'data'=>'test2'), $data);
 				}
 			}
-	//		
-			// test to see that old-school SQL works...
-			$this->dbObj->run_query("SET TIME ZONE '". date_default_timezone_get() ."'");
-			$numRows = $this->dbObj->run_query('SELECT (CURRENT_TIMESTAMP = CURRENT_TIMESTAMP) as date_test, CURRENT_TIMESTAMP as date;');
-			$this->assertEquals($numRows, 1, "Expected one row, actually returned (". $numRows .")");
-
-
-			$data = $this->dbObj->farray_fieldnames();
-			$this->assertTrue(isset($data[0]), "Data does not contain zero-based index...");
-			$this->assertEquals(count($data), 1, "Returned too many records, or mal-formed array");
-			$this->assertTrue($data[0]['date_test'], "Current date doesn't match in database or mal-formed array");
-			$this->assertEquals(count($data[0]), 2, "Too many values beneath index 0");
-
-			$dateString = strftime('%Y-%m-%d');
-			$this->assertTrue((bool)preg_match('/^'. $dateString .'/', $data[0]['date']), "Date in database is invalid or malformed: (". $data[0]['date'] ." does not start with '". $dateString ."')");
-
-			//TODO: re-write this test to use an existing table, or create the table.
-	//		// Test some... fancy SQL
-	//		$numRows = $this->dbObj->run_query('SELECT * FROM test WHERE (data=:x OR :x IS NULL)', array('x'=>'test5'));
-	//		$this->assertTrue(1, $numRows);
-	//		$data = $this->dbObj->farray_fieldnames();
-	//		$this->assertEquals(1, count($data));
-	//		
 
 		}
 	}//end test_basics()

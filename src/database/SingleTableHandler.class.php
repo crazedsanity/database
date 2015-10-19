@@ -121,7 +121,7 @@ class SingleTableHandler extends baseAbstract {
 				}
 			}
 			catch(Exception $e) {
-				throw new Exception(__METHOD__ .":: error while retrieving record (". $recId ."), DETAILS::: ". $e->getMessage());
+				throw new Exception(__METHOD__ .":: (dsn=". $this->dbObj->get_dsn() ."), error while retrieving record (". $recId ."), DETAILS::: ". $e->getMessage());
 			}
 		}
 		else {

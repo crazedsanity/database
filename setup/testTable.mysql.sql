@@ -1,4 +1,5 @@
 
+USE _unittest_;
 CREATE TABLE IF NOT EXISTS cs_test_table (
 	test_id serial NOT NULL UNIQUE PRIMARY KEY,
 	description text,
