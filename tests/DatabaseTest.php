@@ -35,13 +35,7 @@ class TestOfDatabase extends crazedsanity\database\TestDbAbstract {
 		$this->assertEquals('mysql', $this->type);
 		$this->assertTrue(is_object($my));
 		$this->assertTrue($my->is_connected());
-		try {
-			$this->assertEquals(1, parent::reset_db(__DIR__ .'/../setup/schema.mysql.sql'), ToolBox::debug_print($my,0));
-		}
-		catch(PDOException $x) {
-			ToolBox::debug_print($my,1);
-			ToolBox::debug_print($my->dbh,1);
-		}
+		$this->assertEquals(1, parent::reset_db(__DIR__ .'/../setup/schema.mysql.sql'), ToolBox::debug_print($my,0));
 	}
 	//-------------------------------------------------------------------------
 	
