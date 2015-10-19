@@ -12,10 +12,12 @@ script: phpunit --coverage-text
 
 services:
     postgresql
+    mysql
 
 before_script:
   - composer install
   - psql -c 'create database _unittest_' -U postgres
+  - mysql -e 'create database _unittest_'
 
 notifications:
   email:

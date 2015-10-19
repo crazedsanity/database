@@ -15,18 +15,15 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 	protected $user = "postgres";
 	protected $pass = null;
 	
+	const DEFAULT_TYPE = 'pgsql';
+	
 	//-------------------------------------------------------------------------
 	/**
 	 * @codeCoverageIgnore
 	 */
-	public function __construct($type=null) {
+	public function __construct($type=null, $user=null, $pass=null) {
 		$this->lock = new \crazedsanity\core\Lockfile(constant('UNITTEST__LOCKFILE'));
-		
-		if(is_null($type) || empty($type)) {
-			$type = 'pgsql';
-		}
-		$this->type = $type;
-		$this->dsn = $this->type .":host=localhost;dbname=_unittest_";
+		$this->internal_connect_db($type, $user, $pass);
 		
 		$this->reset_db(); //make sure the database is truly in a consistent state
 		$this->setUp();
@@ -91,7 +88,7 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 	 * @codeCoverageIgnore
 	 */
 	protected function setUp() {
-		$this->internal_connect_db();
+		$this->internal_connect_db($this->type, $this->user, $this->pass);
 	}//end setUp()
 	//-------------------------------------------------------------------------
 	
@@ -112,10 +109,35 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @codeCoverageIgnore
 	 */
-	public function internal_connect_db() {
-		if(!is_object($this->dbObj)) {
-			$this->dbObj = new \crazedsanity\database\Database($this->dsn, $this->user, $this->pass);
+	public function internal_connect_db($type='pgsql', $user=null, $pass=null) {
+		if(is_null($type) || empty($type)) {
+			$type = self::DEFAULT_TYPE;
 		}
+		if(!is_null($user)) {
+			$this->user = $user;
+		}
+		
+		if(is_null($this->user) || empty($this->user)) {
+			switch($this->type) {
+				case 'mysql':
+					$this->user = 'root';
+					break;
+				case 'pgsql':
+					$this->user = 'postgres';
+					break;
+				default:
+					throw new \Exception(__METHOD__ .": invalid type (". $tthis->type .")");
+			}
+		}
+		
+		
+		if(!is_null($pass)) {
+			$this->pass = $pass;
+		}
+		$this->type = $type;
+		$this->dsn = $this->type .":host=localhost;dbname=_unittest_";
+		$this->dbObj = new \crazedsanity\database\Database($this->dsn, $this->user, $this->pass);
+		return $this->dbObj;
 	}//end internal_connect_db()
 	//-------------------------------------------------------------------------
 	
@@ -129,18 +151,24 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 		$retval = false;
 		
 		if(!is_null($schemaFile) && !file_exists($schemaFile)) {
-			throw new exception(__METHOD__ .": schema file (". $schemaFile .") does not exist");
+			throw new \exception(__METHOD__ .": schema file (". $schemaFile .") does not exist");
 		}
 		
 		try {
-			$this->internal_connect_db();
+			$this->internal_connect_db($this->type, $this->user, $this->pass);
 			if($this->dbObj->get_transaction_status() == 1) {
 				$this->dbObj->rollbackTrans();
 			}
 			$this->dbObj->beginTrans();
 
-			$this->dbObj->run_query("DROP SCHEMA public CASCADE");
-			$this->dbObj->run_query("CREATE SCHEMA public AUTHORIZATION " . $this->user);
+			if($this->type == 'pgsql') {
+				$this->dbObj->run_query("DROP SCHEMA public CASCADE");
+				$this->dbObj->run_query("CREATE SCHEMA public AUTHORIZATION " . $this->user);
+			}
+			elseif($this->type == 'mysql') {
+				$this->dbObj->run_query("DROP DATABASE _unittest_");
+				$this->dbObj->run_query("CREATE DATABASE _unittest_");
+			}
 
 			if (!is_null($schemaFile)) {
 				$this->dbObj->run_sql_file($schemaFile);
