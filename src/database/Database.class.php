@@ -80,8 +80,7 @@ class Database extends baseAbstract {
 			$this->password = $password;
 
 			//break the DSN into bits...
-			$tmpDsn = preg_replace('/^[aA-zZ]{2,}:/', '', $dsn);
-			$tmpDsn = explode(';', $tmpDsn);
+			$tmpDsn = explode(';', preg_replace('/^[aA-zZ]{2,}:/', '', $dsn));
 			foreach($tmpDsn as $bit) {
 				$subDsnBits = explode('=', $bit);
 				$this->connectParams[$subDsnBits[0]] = $subDsnBits[1];
@@ -267,7 +266,7 @@ class Database extends baseAbstract {
 	
 	
 	//=========================================================================
-	public function run_insert($sql, array $params=null, $seqName, array $driverOptions=array()) {
+	public function run_insert($sql, array $params=null, $seqName=null, array $driverOptions=array()) {
 		
 		#$this->sth = $this->dbh->prepare($sql, $driverOptions);
 		#$this->sth->execute($params);
