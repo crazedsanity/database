@@ -10,10 +10,11 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 	public $dbParams=array();
 	public $dbObj = null;
 	protected $lock = null;
-	protected $dsn;# = "pgsql:host=localhost;dbname=_unittest_";
+	protected $dsn;
 	protected $type = 'pgsql';
 	protected $user = "postgres";
 	protected $pass = null;
+	protected $dbname = '_unittest_';
 	
 	const DEFAULT_TYPE = 'pgsql';
 	
@@ -135,7 +136,7 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 			$this->pass = $pass;
 		}
 		$this->type = $type;
-		$this->dsn = $this->type .":host=localhost;dbname=_unittest_";
+		$this->dsn = $this->type .":host=localhost;dbname=". $this->dbname;
 		$this->dbObj = new \crazedsanity\database\Database($this->dsn, $this->user, $this->pass);
 		return $this->dbObj;
 	}//end internal_connect_db()
@@ -166,8 +167,9 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 				$this->dbObj->run_query("CREATE SCHEMA public AUTHORIZATION " . $this->user);
 			}
 			elseif($this->type == 'mysql') {
-				$this->dbObj->run_query("DROP DATABASE _unittest_");
-				$this->dbObj->run_query("CREATE DATABASE _unittest_");
+				$this->dbObj->run_query("DROP DATABASE ". $this->dbname);
+				$this->dbObj->run_query("CREATE DATABASE ". $this->dbname);
+				$this->dbObj->run_query("USE ". $this->dbname);
 			}
 
 			if (!is_null($schemaFile)) {

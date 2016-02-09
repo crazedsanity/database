@@ -70,10 +70,6 @@ class Database extends baseAbstract {
 			
 			// Set options so PDO's behaviour is consistent (e.g. always throw exceptions)
 			$this->dbh->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-			
-			// Use *real* prepares (for MySQL)
-			$this->dbh->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
-			$this->dbh->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
 			$this->dsn = $dsn;
 			$this->username = $username;
