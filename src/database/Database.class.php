@@ -420,6 +420,21 @@ class Database extends baseAbstract {
 	
 	
 	
+	//=========================================================================
+	public function load_schema($dbType, Database $db) {
+		$file = dirname(__FILE__) .'/../setup/schema.'. $dbType .'.sql';
+		try {
+			$result = $db->run_sql_file($file);
+		}
+		catch(Exception $e) {
+			throw new exception(__METHOD__ .": failed to load schema file (". $file ."), DETAILS::: ". $e->getMessage());
+		}
+		return($result);
+	}//end load_schema()
+	//=========================================================================
+	
+	
+	
 	// wrapper methods (for backwards-compatibility)
 	public function beginTrans() {return($this->dbh->beginTransaction());}
 	public function commitTrans() {return($this->dbh->commit());}
