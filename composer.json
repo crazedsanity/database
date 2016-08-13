@@ -4,7 +4,6 @@
 	"description": "Database abstraction library.",
 	"keywords": ["php", "dry", "oaoo", "database", "postgres", "mysql", "sqlite", "pdo"],
 	"homepage": "http://www.crazedsanity.com",
-	"license": "MIT",
 	"authors": [
 		{
 			"name": "Dan Falconer",
@@ -18,7 +17,7 @@
 	},
 	"require": {
 		"php":	">=5.3.0",
-		"crazedsanity/core": "~0.2"
+		"crazedsanity/core": "~0.3"
 	},
 	"minimum-stability": "dev"
 }
