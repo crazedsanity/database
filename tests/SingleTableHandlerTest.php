@@ -14,7 +14,7 @@ class TestOfSingleTableHandler extends TestDbAbstract {
 	
 	//-------------------------------------------------------------------------
 	public function __construct() {
-		parent::__construct();
+		parent::__construct('mysql', 'root');
 	}//end __construct()
 	//-------------------------------------------------------------------------
 	
@@ -36,8 +36,8 @@ class TestOfSingleTableHandler extends TestDbAbstract {
 		$seq = 'cs_test_table_test_id_seq';
 		$pkey = 'test_id';
 		
-		$types = array('pgsql', 'mysql');
-		$users = array('postgres', 'root');
+		$types = array('mysql');
+		$users = array('root');
 		foreach($types as $i=>$type) {
 			
 			parent::internal_connect_db($type, $users[$i]);
@@ -101,8 +101,8 @@ class TestOfSingleTableHandler extends TestDbAbstract {
 	
 	//-------------------------------------------------------------------------
 	public function test_get_record_by_id() {
-		$types = array('pgsql', 'mysql');
-		$users = array('postgres', 'root');
+		$types = array('mysql');
+		$users = array('root');
 		foreach($types as $i=>$type) {
 			
 			parent::internal_connect_db($type, $users[$i]);
@@ -143,8 +143,8 @@ class TestOfSingleTableHandler extends TestDbAbstract {
 	
 	//-------------------------------------------------------------------------
 	public function test_create_record() {
-		$types = array('pgsql', 'mysql');
-		$users = array('postgres', 'root');
+		$types = array('mysql');
+		$users = array('root');
 		foreach($types as $i=>$type) {
 			
 			parent::internal_connect_db($type, $users[$i]);
@@ -191,8 +191,8 @@ class TestOfSingleTableHandler extends TestDbAbstract {
 	
 	//-------------------------------------------------------------------------
 	public function test_get_single_record() {
-		$types = array('pgsql', 'mysql');
-		$users = array('postgres', 'root');
+		$types = array('mysql');
+		$users = array('root');
 		foreach($types as $i=>$type) {
 			
 			parent::internal_connect_db($type, $users[$i]);
@@ -225,8 +225,8 @@ class TestOfSingleTableHandler extends TestDbAbstract {
 	
 	//-------------------------------------------------------------------------
 	public function test_get_records() {
-		$types = array('pgsql', 'mysql');
-		$users = array('postgres', 'root');
+		$types = array('mysql');
+		$users = array('root');
 		foreach($types as $i=>$type) {
 			
 			parent::internal_connect_db($type, $users[$i]);

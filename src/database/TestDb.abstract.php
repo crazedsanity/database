@@ -23,6 +23,15 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 	 * @codeCoverageIgnore
 	 */
 	public function __construct($type=null, $user=null, $pass=null) {
+		if(!is_null($type) && !empty($type)) {
+			$this->type = $type;
+		}
+		if(!is_null($user) && !empty($user)) {
+			$this->user = $user;
+		}
+		if(!is_null($pass) && !empty($pass)) {
+			$this->pass = $pass;
+		}
 		$this->lock = new \crazedsanity\core\Lockfile(constant('UNITTEST__LOCKFILE'));
 		$this->internal_connect_db($type, $user, $pass);
 		
