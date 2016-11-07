@@ -123,6 +123,8 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 		if(is_null($type) || empty($type)) {
 			$type = self::DEFAULT_TYPE;
 		}
+		$this->type = $type;
+		
 		if(!is_null($user)) {
 			$this->user = $user;
 		}
@@ -136,7 +138,7 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 					$this->user = 'postgres';
 					break;
 				default:
-					throw new \Exception(__METHOD__ .": invalid type (". $this->type .")");
+					throw new \Exception(__METHOD__ .": invalid type (". $type .")");
 			}
 		}
 		
