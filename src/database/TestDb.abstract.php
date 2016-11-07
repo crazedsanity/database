@@ -136,7 +136,7 @@ abstract class TestDbAbstract extends \PHPUnit_Framework_TestCase {
 					$this->user = 'postgres';
 					break;
 				default:
-					throw new \Exception(__METHOD__ .": invalid type (". $tthis->type .")");
+					throw new \Exception(__METHOD__ .": invalid type (". $this->type .")");
 			}
 		}
 		
