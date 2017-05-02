@@ -11,7 +11,7 @@ php:
 install:
     - composer install
 
-script: vendor/bin/phpunit --coverage-text
+script: phpunit --coverage-text
 
 services:
     postgresql
