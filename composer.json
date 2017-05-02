@@ -17,8 +17,7 @@
 	},
 	"require": {
 		"php":	">=5.3.0",
-		"crazedsanity/core": "~0.3",
-		"phpunit/phpunit": "5.6"
+		"crazedsanity/core": "~0.3"
 	},
 	"minimum-stability": "dev"
 }
